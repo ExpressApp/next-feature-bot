@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+
+autoflake --recursive --remove-all-unused-imports --in-place app
+isort --profile black app
+black app

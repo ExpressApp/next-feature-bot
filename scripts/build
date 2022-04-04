@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+
+CI_COMMIT_SHA=$(git rev-parse --verify HEAD)
+BOT_PROJECT_NAME=$(basename "$(pwd)")
+docker build \
+    --build-arg CI_COMMIT_SHA="${CI_COMMIT_SHA}" \
+    -t registry.ccsteam.ru/bots/"${BOT_PROJECT_NAME}" .

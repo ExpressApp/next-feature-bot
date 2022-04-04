@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+
+set -euxo pipefail
+
+isort --check-only app
+black --check app --diff
+mypy app
+flake8 app
