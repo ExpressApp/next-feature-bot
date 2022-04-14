@@ -11,7 +11,7 @@ from pybotx import (
     ChatTypes,
     IncomingMessage,
     InvalidUsersListError,
-    Mention,
+    MentionBuilder,
     PermissionDeniedError,
     StealthModeDisabledError,
 )
@@ -167,8 +167,8 @@ async def add_users_to_chat(message: IncomingMessage, bot: Bot) -> None:
     try:
         await bot.add_users_to_chat(
             bot_id=message.bot.id,
-            chat_id=chat_id,  # TODO: Split mentions in several classes in pybotx
-            huids=[user.entity_id for user in user_mentions],  # type: ignore
+            chat_id=chat_id,
+            huids=[user.entity_id for user in user_mentions],
         )
     except (ChatNotFoundError, PermissionDeniedError) as exc:
         await bot.answer_message(str(exc))
@@ -218,7 +218,7 @@ async def remove_users_from_chat(message: IncomingMessage, bot: Bot) -> None:
         await bot.remove_users_from_chat(
             bot_id=message.bot.id,
             chat_id=chat_id,
-            huids=[user.entity_id for user in user_mentions],  # type: ignore
+            huids=[user.entity_id for user in user_mentions],
         )
     except (ChatNotFoundError, PermissionDeniedError) as exc:
         await bot.answer_message(str(exc))
@@ -268,7 +268,7 @@ async def promote_to_chat_admin(message: IncomingMessage, bot: Bot) -> None:
         await bot.promote_to_chat_admins(
             bot_id=message.bot.id,
             chat_id=chat_id,
-            huids=[user.entity_id for user in user_mentions],  # type: ignore
+            huids=[user.entity_id for user in user_mentions],
         )
     except (
         ChatNotFoundError,
@@ -429,7 +429,7 @@ async def create_chat(message: IncomingMessage, bot: Bot) -> None:
             bot_id=message.bot.id,
             name=chat_name,
             chat_type=chat_type,
-            huids=[user.entity_id for user in user_mentions],  # type: ignore
+            huids=[user.entity_id for user in user_mentions],
             shared_history=shared_history,
         )
     except (ChatCreationProhibitedError, ChatCreationError) as exc:
@@ -438,7 +438,7 @@ async def create_chat(message: IncomingMessage, bot: Bot) -> None:
 
     text = "Channel created" if chat_type == ChatTypes.CHANNEL else "Chat created"
     await bot.answer_message(
-        f"{text}: {Mention.chat(chat_id, chat_name)}"
+        f"{text}: {MentionBuilder.chat(chat_id, chat_name)}"
     )  # noqa: WPS221
 
     if chat_type == ChatTypes.PERSONAL_CHAT:

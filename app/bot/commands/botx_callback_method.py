@@ -40,7 +40,13 @@ class CallBotXCallbackMethodResult:
 
 class CallBotXMethod(AuthorizedBotXMethod):
     async def execute(
-        self, method: str, path_with_query: str, payload_dict: Optional[Dict[str, Any]]
+        self,
+        method: str,
+        path_with_query: str,
+        payload_dict: Optional[Dict[str, Any]],
+        wait_callback: bool,
+        callback_timeout: Optional[float],
+        default_callback_timeout: float,
     ) -> CallBotXCallbackMethodResult:
         response = await self._botx_method_call(
             method,
@@ -55,8 +61,9 @@ class CallBotXMethod(AuthorizedBotXMethod):
 
         await self._process_callback(
             api_model.result.sync_id,
-            wait_callback=False,
-            callback_timeout=None,
+            wait_callback=wait_callback,
+            callback_timeout=callback_timeout,
+            default_callback_timeout=default_callback_timeout,
         )
 
         return CallBotXCallbackMethodResult(
@@ -129,12 +136,17 @@ async def botx_callback_method_handler(  # noqa: WPS210, WPS217
         sender_bot_id=message.bot.id,
         httpx_client=bot._httpx_client,  # noqa: WPS437 (Hotplugging method)
         bot_accounts_storage=bot._bot_accounts_storage,  # noqa: WPS437
-        callbacks_manager=bot._callback_manager,  # noqa: WPS437
+        callbacks_manager=bot._callbacks_manager,  # noqa: WPS437
     )
 
     try:
         call_result = await botx_method.execute(
-            http_method, path_with_query, request_payload
+            http_method,
+            path_with_query,
+            request_payload,
+            wait_callback=False,
+            callback_timeout=5,
+            default_callback_timeout=bot._default_callback_timeout,  # noqa: WPS437
         )
     except InvalidBotXResponsePayloadError:
         await bot.answer_message(
@@ -150,7 +162,6 @@ async def botx_callback_method_handler(  # noqa: WPS210, WPS217
     try:
         callback = await bot.wait_botx_method_callback(
             call_result.sync_id,
-            timeout=5,
         )
     except CallbackNotReceivedError:
         await bot.answer_message("Callback is not recieved.")

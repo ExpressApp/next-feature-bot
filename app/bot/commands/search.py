@@ -2,7 +2,7 @@
 
 from uuid import UUID
 
-from pybotx import Bot, IncomingMessage, Mention, UserNotFoundError
+from pybotx import Bot, IncomingMessage, MentionBuilder, UserNotFoundError
 
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 from app.bot.regular_expressions import SEARCH_USER_REGEXP
@@ -75,4 +75,4 @@ async def search_user(message: IncomingMessage, bot: Bot) -> None:  # noqa: WPS2
     else:
         raise RuntimeError(f"Unknown search attr {message.argument}")
 
-    await bot.answer_message(f"User found: {Mention.contact(user.huid)}")
+    await bot.answer_message(f"User found: {MentionBuilder.contact(user.huid)}")

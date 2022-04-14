@@ -1,16 +1,19 @@
 """Utils to work with mentions."""
 
-from typing import List
+from typing import List, Union
 
-from pybotx import IncomingMessage, Mention, MentionTypes
+from pybotx import IncomingMessage
+from pybotx.models.message.mentions import MentionContact, MentionUser
 
 
-def user_mentions_without_bot(message: IncomingMessage) -> List[Mention]:
+def user_mentions_without_bot(
+    message: IncomingMessage,
+) -> List[Union[MentionUser, MentionContact]]:
     return [
         mention
         for mention in message.mentions
         if (
-            mention.type in {MentionTypes.CONTACT, MentionTypes.USER}
+            isinstance(mention, (MentionUser, MentionContact))
             and mention.entity_id != message.bot.id
         )
     ]

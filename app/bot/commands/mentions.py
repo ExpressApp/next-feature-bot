@@ -2,7 +2,7 @@
 
 from typing import List
 
-from pybotx import Bot, IncomingMessage, Mention
+from pybotx import Bot, IncomingMessage, Mention, MentionBuilder
 
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 from app.bot.mentions import user_mentions_without_bot
@@ -43,7 +43,7 @@ async def print_mentions_handler(message: IncomingMessage, bot: Bot) -> None:
     answer_body = "\n".join(
         [
             "**You've send these mentions to bot**",
-            f"Sender's mention: {Mention.user(message.sender.huid)}",
+            f"Sender's mention: {MentionBuilder.user(message.sender.huid)}",
             f"Users: {join_mentions(mentions.users)}",
             f"Contacts: {join_mentions(mentions.contacts)}",
             f"Chats: {join_mentions(mentions.chats)}",
@@ -79,12 +79,11 @@ async def huids_by_mentions(message: IncomingMessage, bot: Bot) -> None:
         await bot.answer_message("**Error:** No user mentions specified")
         return
 
-    sorted_user_mentions = sorted(
+    sorted_user_mentions = sorted(  # Incoming mention always has a name
         user_mentions, key=lambda mention: mention.name  # type: ignore
     )
 
     text = "\n".join(
         f"{mention.name}: `{mention.entity_id}`" for mention in sorted_user_mentions
     )
-
     await bot.answer_message(text)

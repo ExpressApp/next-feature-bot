@@ -1,6 +1,6 @@
 """Handlers for system events."""
 
-from pybotx import Bot, CTSLoginEvent, CTSLogoutEvent, IncomingMessage, Mention
+from pybotx import Bot, CTSLoginEvent, CTSLogoutEvent, IncomingMessage, MentionBuilder
 
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 
@@ -52,7 +52,7 @@ async def cts_login_handler(event: CTSLoginEvent, bot: Bot) -> None:
     listeners = bot.state.chats_listening_cts_events.get(event.bot.host)
 
     for chat_id in listeners:
-        text = f"{Mention.contact(event.huid)} logged into {event.bot.host}"
+        text = f"{MentionBuilder.contact(event.huid)} logged into {event.bot.host}"
         await bot.send_message(bot_id=event.bot.id, chat_id=chat_id, body=text)
 
 
@@ -61,5 +61,5 @@ async def cts_logout_handler(event: CTSLogoutEvent, bot: Bot) -> None:
     listeners = bot.state.chats_listening_cts_events.get(event.bot.host)
 
     for chat_id in listeners:
-        text = f"{Mention.contact(event.huid)} logged out from {event.bot.host}"
+        text = f"{MentionBuilder.contact(event.huid)} logged out from {event.bot.host}"
         await bot.send_message(bot_id=event.bot.id, chat_id=chat_id, body=text)
