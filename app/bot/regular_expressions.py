@@ -1,5 +1,8 @@
 import re
 
+ADD_BOT_CREDENIALS_REGEXP = re.compile(
+    r"^(?P<host>\S+\.\S+)\s+(?P<secret_key>\w+)\s+(?P<bot_id>[a-f0-9-]+)$"
+)
 BOTX_METHOD_ARGS_REGEXP = re.compile(
     (
         r"^(?P<http_method>(GET|POST|PUT|PATCH|DELETE)) +(?P<path_with_query>\/\S+)"
