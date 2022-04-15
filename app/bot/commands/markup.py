@@ -20,7 +20,10 @@ def _create_markup(
     bubbles = markup_cls()
 
     for index in range(rows * columns):
-        bubbles.add_button("", str(index), new_row=(index % columns == 0))
+        new_row = index % columns == 0
+        bubbles.add_button(
+            f"/echo Your pressed button **{index}**", str(index), new_row=new_row
+        )
 
     return bubbles
 
@@ -93,7 +96,14 @@ def build_sized_markup(markup_cls: Type[Markup]) -> Markup:
 
     return markup_cls(
         [
-            [Button(command="", label=str(size), width_ratio=size) for size in row]
+            [
+                Button(
+                    command=f"/echo Your pressed button with h-size **{size}**",
+                    label=str(size),
+                    width_ratio=size,
+                )
+                for size in row
+            ]
             for row in sizes
         ]
     )
