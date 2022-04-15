@@ -12,7 +12,8 @@ collector = HandlerCollectorWithHelp()
 async def add_credentials_handler(message: IncomingMessage, bot: Bot) -> None:
     """`/add-credentials host secret_key bot_id`
 
-    Add new bot credentials.
+    Add new bot credentials. They will be available until bot restart.
+    For persistent credentials use `BOT_CREDENTIALS` env variable.
 
     • `host` - Bot host (same as admin-site host).
     • `secret` - Secret key from bot profile.
