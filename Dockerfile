@@ -1,4 +1,4 @@
-FROM registry.ccsteam.ru/bots/botx-app-base:3.9-master
+FROM registry.ccsteam.ru/bots/botx-app-base:3.10-master
 
 COPY poetry.lock pyproject.toml ./
 COPY pybotx-submodule pybotx-submodule
