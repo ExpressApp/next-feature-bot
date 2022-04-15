@@ -124,3 +124,40 @@ async def h_size_handler(message: IncomingMessage, bot: Bot) -> None:
     keyboard = cast(KeyboardMarkup, build_sized_markup(KeyboardMarkup))
 
     await bot.answer_message(message.body, bubbles=bubbles, keyboard=keyboard)
+
+
+@collector.command_with_help("/alert-buttons", description="Create buttons with alert")
+async def alert_buttons_handler(message: IncomingMessage, bot: Bot) -> None:
+    """`/alert-buttons [text]`
+
+    Create buttons with alert.
+
+    • `text` - Alert text for buttons
+
+    Examples:
+
+    ```bash
+    # Get buttons with default alert text
+    /alert-buttons
+
+    # Get buttons with specified alert text
+    /alert-buttons Specified text
+    ```
+    """
+    alert_text = message.argument or "Alert text"
+
+    bubbles = BubbleMarkup()
+    bubbles.add_button(
+        command="/echo Alert bubble pressed",
+        label="Bubble with alert",
+        alert=alert_text,
+    )
+
+    keyboard = KeyboardMarkup()
+    keyboard.add_button(
+        command="/echo Alert keyboard button pressed",
+        label="Keyboard button with alert",
+        alert=alert_text,
+    )
+
+    await bot.answer_message("Alert buttons:", bubbles=bubbles, keyboard=keyboard)
