@@ -1,0 +1,17 @@
+version: "3.8"
+
+services:
+  next-feature-bot:
+    build: .
+    container_name: next-feature-bot
+    environment:
+      - BOT_CREDENTIALS=cts.domain@secret@bot_id
+      - DEBUG=1
+    ports:
+      - "8000:8000"
+    restart: always
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "10"
