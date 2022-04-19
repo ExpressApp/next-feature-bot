@@ -5,7 +5,7 @@ services:
     build: .
     container_name: next-feature-bot
     environment:
-      - BOT_CREDENTIALS=cts.domain@secret@bot_id
+      - BOT_CREDENTIALS=cts_host@secret@bot_id
       - DEBUG=1
     ports:
       - "8000:8000"
