@@ -131,7 +131,7 @@ async def download_file(message: IncomingMessage, bot: Bot) -> None:
     "/send-file",
     description="Send file by extension",
 )
-async def download_file(message: IncomingMessage, bot: Bot) -> None:
+async def send_file(message: IncomingMessage, bot: Bot) -> None:
     """`/send-file extension`
 
     Send sample file with required extension.
@@ -156,7 +156,7 @@ async def download_file(message: IncomingMessage, bot: Bot) -> None:
         return
 
     try:
-        file = OutgoingAttachment(files[extension], f"file.{extension}")
+        file_sample = OutgoingAttachment(files[extension], f"file.{extension}")
     except KeyError:
         await bot.answer_message(f"Unknown extension: {extension}")
         return
@@ -164,6 +164,6 @@ async def download_file(message: IncomingMessage, bot: Bot) -> None:
     await bot.send_message(
         bot_id=message.bot.id,
         chat_id=message.chat.id,
-        body='',
-        file=file,
+        body="",
+        file=file_sample,
     )

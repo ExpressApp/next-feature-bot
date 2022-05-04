@@ -3,7 +3,6 @@ from typing import Any, Dict, Optional, Union, cast
 
 import aiofiles
 from aiofiles.tempfile import NamedTemporaryFile
-from aiofiles.threadpool import AsyncBufferedReader
 from pybotx import Bot, File
 from pybotx.models.attachments import IncomingFileAttachment, OutgoingAttachment
 
@@ -64,8 +63,8 @@ async def get_request_payload(
 
 async def get_files() -> Dict[str, bytes]:
     read_files = {}
-    for file in settings.FILES_DIR.iterdir():
-        async with aiofiles.open(file, "rb") as f:
-            suffix = "".join(file.suffixes)[1:]
-            read_files[suffix] = await f.read()
+    for file_sample in settings.FILES_DIR.iterdir():
+        async with aiofiles.open(file_sample, "rb") as buffer:
+            suffix = "".join(file_sample.suffixes)[1:]
+            read_files[suffix] = await buffer.read()
     return read_files
