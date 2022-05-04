@@ -1,7 +1,7 @@
 import json
+from pathlib import Path
 from typing import Any, Dict, Optional, Union, cast
 
-import aiofiles
 from aiofiles.tempfile import NamedTemporaryFile
 from pybotx import Bot, File
 from pybotx.models.attachments import IncomingFileAttachment, OutgoingAttachment
@@ -61,10 +61,9 @@ async def get_request_payload(
     return cast(Dict[str, Any], embedded_payload)
 
 
-async def get_files() -> Dict[str, bytes]:
-    read_files = {}
+async def get_file_paths() -> Dict[str, Path]:
+    file_paths = {}
     for file_sample in settings.FILES_DIR.iterdir():
-        async with aiofiles.open(file_sample, "rb") as buffer:
-            suffix = "".join(file_sample.suffixes)[1:]
-            read_files[suffix] = await buffer.read()
-    return read_files
+        extension = "".join(file_sample.suffixes).removeprefix(".")
+        file_paths[extension] = file_sample
+    return file_paths

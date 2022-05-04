@@ -2,6 +2,7 @@
 
 from uuid import UUID
 
+import aiofiles
 from aiofiles.tempfile import NamedTemporaryFile
 from pybotx import (
     Bot,
@@ -12,7 +13,7 @@ from pybotx import (
     OutgoingAttachment,
 )
 
-from app.bot.botx_method_utils import get_files
+from app.bot.botx_method_utils import get_file_paths
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 
 collector = HandlerCollectorWithHelp()
@@ -145,22 +146,25 @@ async def send_file(message: IncomingMessage, bot: Bot) -> None:
     """
 
     extension = message.argument
-    files = await get_files()
+    file_paths = await get_file_paths()
+    available_extensions = set(file_paths)
 
     if not extension:
         await bot.answer_message(
             "Argument required: `/send-file <file_ext>`\n"
-            f"Extensions: {set(files.keys())}"
+            f"Extensions: {available_extensions}"
         )
         return
 
-    try:
-        outgoing_file = OutgoingAttachment(files[extension], f"file.{extension}")
-    except KeyError:
+    if not (current_path := file_paths.get(extension)):
         await bot.answer_message(
             f"Unknown extension: {extension}\n"
-            f"Supported extensions: {set(files.keys())}"
+            f"Supported extensions: {available_extensions}"
         )
         return
 
+    async with aiofiles.open(current_path, "rb") as buffer:
+        outgoing_file = await OutgoingAttachment.from_async_buffer(
+            buffer, f"file.{extension}"
+        )
     await bot.answer_message("File", file=outgoing_file)
