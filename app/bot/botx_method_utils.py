@@ -64,6 +64,6 @@ async def get_request_payload(
 async def get_file_paths() -> Dict[str, Path]:
     file_paths = {}
     for file_sample in settings.FILES_DIR.iterdir():
-        suffix = "".join(file_sample.suffixes)[1:]
-        file_paths[suffix] = file_sample
+        extension = "".join(file_sample.suffixes).removeprefix(".")
+        file_paths[extension] = file_sample
     return file_paths
