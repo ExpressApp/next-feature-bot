@@ -12,6 +12,7 @@ from pybotx import (
     OutgoingAttachment,
 )
 
+from app.bot.botx_method_utils import get_files
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 
 collector = HandlerCollectorWithHelp()
@@ -124,3 +125,42 @@ async def download_file(message: IncomingMessage, bot: Bot) -> None:
         )
 
         await bot.answer_message("File", file=outgoing_file)
+
+
+@collector.command_with_help(
+    "/send-file",
+    description="Send file by extension",
+)
+async def send_file(message: IncomingMessage, bot: Bot) -> None:
+    """`/send-file extension`
+
+    Send sample file with required extension.
+
+    • `extension` - Extension of target file.
+
+    ```bash
+    # Send pdf file
+    /send-file pdf
+    ```
+    """
+
+    extension = message.argument
+    files = await get_files()
+
+    if not extension:
+        await bot.answer_message(
+            "Argument required: `/send-file <file_ext>`\n"
+            f"Extensions: {set(files.keys())}"
+        )
+        return
+
+    try:
+        outgoing_file = OutgoingAttachment(files[extension], f"file.{extension}")
+    except KeyError:
+        await bot.answer_message(
+            f"Unknown extension: {extension}\n"
+            f"Supported extensions: {set(files.keys())}"
+        )
+        return
+
+    await bot.answer_message("File", file=outgoing_file)

@@ -1,9 +1,12 @@
 import json
 from typing import Any, Dict, Optional, Union, cast
 
+import aiofiles
 from aiofiles.tempfile import NamedTemporaryFile
 from pybotx import Bot, File
 from pybotx.models.attachments import IncomingFileAttachment, OutgoingAttachment
+
+from app.settings import settings
 
 BOTX_RESPONSE_LABEL_TEMPLATE = "**Status code:** `{status_code}`\n**Response payload:**"
 
@@ -56,3 +59,12 @@ async def get_request_payload(
         raise ValueError(f"**Error:**\n{embedded_decoding_exc}")
 
     return cast(Dict[str, Any], embedded_payload)
+
+
+async def get_files() -> Dict[str, bytes]:
+    read_files = {}
+    for file_sample in settings.FILES_DIR.iterdir():
+        async with aiofiles.open(file_sample, "rb") as buffer:
+            suffix = "".join(file_sample.suffixes)[1:]
+            read_files[suffix] = await buffer.read()
+    return read_files

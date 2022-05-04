@@ -1,5 +1,5 @@
 """Application settings."""
-
+from pathlib import Path
 from typing import Any, List
 from uuid import UUID
 
@@ -17,6 +17,8 @@ class AppSettings(BaseSettings):
 
     # base kwargs
     DEBUG: bool = False
+
+    FILES_DIR: Path = Path("files")
 
     @validator("BOT_CREDENTIALS", pre=True)
     @classmethod
