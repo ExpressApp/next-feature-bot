@@ -148,22 +148,22 @@ async def send_file(message: IncomingMessage, bot: Bot) -> None:
     files = await get_files()
 
     if not extension:
-        text = (
+        await bot.answer_message(
             "Argument required: `/send-file <file_ext>`\n"
             f"Extensions: {set(files.keys())}"
         )
-        await bot.answer_message(text)
         return
 
     try:
         file_sample = OutgoingAttachment(files[extension], f"file.{extension}")
     except KeyError:
-        await bot.answer_message(f"Unknown extension: {extension}")
+        await bot.answer_message(
+            f"Unknown extension: {extension}\n"
+            f"Supported extensions: {set(files.keys())}"
+        )
         return
 
-    await bot.send_message(
-        bot_id=message.bot.id,
-        chat_id=message.chat.id,
+    await bot.answer_message(
         body="",
         file=file_sample,
     )
