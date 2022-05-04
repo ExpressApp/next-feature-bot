@@ -155,7 +155,7 @@ async def send_file(message: IncomingMessage, bot: Bot) -> None:
         return
 
     try:
-        file_sample = OutgoingAttachment(files[extension], f"file.{extension}")
+        outgoing_file = OutgoingAttachment(files[extension], f"file.{extension}")
     except KeyError:
         await bot.answer_message(
             f"Unknown extension: {extension}\n"
@@ -163,7 +163,4 @@ async def send_file(message: IncomingMessage, bot: Bot) -> None:
         )
         return
 
-    await bot.answer_message(
-        body="",
-        file=file_sample,
-    )
+    await bot.answer_message("File", file=outgoing_file)
