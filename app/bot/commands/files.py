@@ -147,18 +147,19 @@ async def send_file(message: IncomingMessage, bot: Bot) -> None:
 
     extension = message.argument
     file_paths = await get_file_paths()
+    available_extensions = set(file_paths)
 
     if not extension:
         await bot.answer_message(
             "Argument required: `/send-file <file_ext>`\n"
-            f"Extensions: {set(file_paths)}"
+            f"Extensions: {available_extensions}"
         )
         return
 
     if not (current_path := file_paths.get(extension)):
         await bot.answer_message(
             f"Unknown extension: {extension}\n"
-            f"Supported extensions: {set(file_paths)}"
+            f"Supported extensions: {available_extensions}"
         )
         return
 
