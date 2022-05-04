@@ -13,7 +13,7 @@ from pybotx import (
     OutgoingAttachment,
 )
 
-from app.bot.botx_method_utils import get_file_path
+from app.bot.botx_method_utils import get_file_paths
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 
 collector = HandlerCollectorWithHelp()
@@ -146,7 +146,7 @@ async def send_file(message: IncomingMessage, bot: Bot) -> None:
     """
 
     extension = message.argument
-    file_paths = await get_file_path()
+    file_paths = await get_file_paths()
 
     if not extension:
         await bot.answer_message(

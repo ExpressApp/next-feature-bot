@@ -61,7 +61,7 @@ async def get_request_payload(
     return cast(Dict[str, Any], embedded_payload)
 
 
-async def get_file_path() -> Dict[str, Path]:
+async def get_file_paths() -> Dict[str, Path]:
     file_paths = {}
     for file_sample in settings.FILES_DIR.iterdir():
         suffix = "".join(file_sample.suffixes)[1:]
