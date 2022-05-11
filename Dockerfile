@@ -32,6 +32,7 @@ COPY pybotx-submodule pybotx-submodule
 RUN poetry install --no-dev
 
 COPY app app
+COPY files files
 
 ARG CI_COMMIT_SHA=""
 ENV GIT_COMMIT_SHA=${CI_COMMIT_SHA}
