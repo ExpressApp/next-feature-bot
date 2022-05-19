@@ -1,6 +1,7 @@
 """Handlers for system events."""
 
-from pybotx import Bot, CTSLoginEvent, CTSLogoutEvent, IncomingMessage, MentionBuilder
+# from pybotx import Bot, CTSLoginEvent, CTSLogoutEvent, IncomingMessage, MentionBuilder
+from lalala.pybotx import Bot, CTSLoginEvent, CTSLogoutEvent, IncomingMessage, MentionBuilder, ChatCreatedEvent
 
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 
@@ -63,3 +64,8 @@ async def cts_logout_handler(event: CTSLogoutEvent, bot: Bot) -> None:
     for chat_id in listeners:
         text = f"{MentionBuilder.contact(event.huid)} logged out from {event.bot.host}"
         await bot.send_message(bot_id=event.bot.id, chat_id=chat_id, body=text)
+
+
+@collector.chat_created
+async def chat_created(_: ChatCreatedEvent, bot: Bot):
+    await bot.answer_message(body="Chat created!")

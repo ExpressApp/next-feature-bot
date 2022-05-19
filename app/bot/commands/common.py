@@ -65,11 +65,6 @@ async def help_handler(message: IncomingMessage, bot: BotWithHelp) -> None:
     await bot.answer_message(answer_body)
 
 
-@collector.chat_created
-async def chat_created_handler(_: ChatCreatedEvent, bot: Bot) -> None:
-    await bot.answer_message("Chat created!")
-
-
 @collector.command("/_debug:git-commit-sha", visible=False)
 async def git_commit_sha(_: IncomingMessage, bot: Bot) -> None:
     commit_sha = environ.get("GIT_COMMIT_SHA") or "<undefined>"
