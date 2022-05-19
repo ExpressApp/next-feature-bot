@@ -3,7 +3,7 @@
 import json
 from os import environ
 
-from pybotx import Bot, ChatCreatedEvent, IncomingMessage, StatusRecipient
+from pybotx import Bot, IncomingMessage, StatusRecipient
 
 from app.bot.bot_with_help import BotWithHelp
 from app.bot.handler_with_help import HandlerCollectorWithHelp
