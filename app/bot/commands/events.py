@@ -1,6 +1,16 @@
 """Handlers for system events."""
 
-from pybotx import Bot, CTSLoginEvent, CTSLogoutEvent, IncomingMessage, MentionBuilder
+from pybotx import (
+    AddedToChatEvent,
+    Bot,
+    ChatCreatedEvent,
+    CTSLoginEvent,
+    CTSLogoutEvent,
+    DeletedFromChatEvent,
+    IncomingMessage,
+    LeftFromChatEvent,
+    MentionBuilder,
+)
 
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 
@@ -63,3 +73,35 @@ async def cts_logout_handler(event: CTSLogoutEvent, bot: Bot) -> None:
     for chat_id in listeners:
         text = f"{MentionBuilder.contact(event.huid)} logged out from {event.bot.host}"
         await bot.send_message(bot_id=event.bot.id, chat_id=chat_id, body=text)
+
+
+@collector.chat_created
+async def chat_created(event: ChatCreatedEvent, bot: Bot) -> None:
+    await bot.answer_message(
+        body=f"Chat was created by {MentionBuilder.contact(event.creator_id)}!"
+    )
+
+
+@collector.added_to_chat
+async def added_to_chat(event: AddedToChatEvent, bot: Bot) -> None:
+    new_members = [str(MentionBuilder.contact(member)) for member in event.huids]
+
+    await bot.answer_message(f"Hello, {', '.join(new_members)}!")
+
+
+@collector.deleted_from_chat
+async def deleted_from_chat(event: DeletedFromChatEvent, bot: Bot) -> None:
+    if event.bot.id in event.huids:
+        return
+
+    deleted_members = [str(MentionBuilder.contact(member)) for member in event.huids]
+    await bot.answer_message(f"{', '.join(deleted_members)} was deleted from chat!")
+
+
+@collector.left_from_chat
+async def left_from_chat(event: LeftFromChatEvent, bot: Bot) -> None:
+    if event.bot.id in event.huids:
+        return
+
+    left_members = [str(MentionBuilder.contact(member)) for member in event.huids]
+    await bot.answer_message(f"Bye, {', '.join(left_members)}")

@@ -3,7 +3,7 @@
 import json
 from os import environ
 
-from pybotx import Bot, ChatCreatedEvent, IncomingMessage, StatusRecipient
+from pybotx import Bot, IncomingMessage, StatusRecipient
 
 from app.bot.bot_with_help import BotWithHelp
 from app.bot.handler_with_help import HandlerCollectorWithHelp
@@ -63,11 +63,6 @@ async def help_handler(message: IncomingMessage, bot: BotWithHelp) -> None:
         answer_body = strings.HELP_COMMAND_MESSAGE_TEMPLATE.format(bot_status=status)
 
     await bot.answer_message(answer_body)
-
-
-@collector.chat_created
-async def chat_created_handler(_: ChatCreatedEvent, bot: Bot) -> None:
-    await bot.answer_message("Chat created!")
 
 
 @collector.command("/_debug:git-commit-sha", visible=False)
