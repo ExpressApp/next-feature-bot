@@ -95,7 +95,7 @@ async def deleted_from_chat(event: DeletedFromChatEvent, bot: Bot) -> None:
         return
 
     deleted_members = [str(MentionBuilder.contact(member)) for member in event.huids]
-    await bot.answer_message(f"Bye, {', '.join(deleted_members)}!")
+    await bot.answer_message(f"{', '.join(deleted_members)} was deleted from chat!")
 
 
 @collector.left_from_chat
@@ -104,4 +104,4 @@ async def left_from_chat(event: LeftFromChatEvent, bot: Bot) -> None:
         return
 
     left_members = [str(MentionBuilder.contact(member)) for member in event.huids]
-    await bot.answer_message(f"{', '.join(left_members)} left our chat!")
+    await bot.answer_message(f"Bye, {', '.join(left_members)}")
