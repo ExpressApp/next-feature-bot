@@ -76,41 +76,32 @@ async def cts_logout_handler(event: CTSLogoutEvent, bot: Bot) -> None:
 
 
 @collector.chat_created
-async def chat_created(_: ChatCreatedEvent, bot: Bot) -> None:
-    await bot.answer_message(body="Chat was created!")
+async def chat_created(event: ChatCreatedEvent, bot: Bot) -> None:
+    await bot.answer_message(
+        body=f"Chat was created by {MentionBuilder.contact(event.creator_id)}!"
+    )
 
 
 @collector.added_to_chat
 async def added_to_chat(event: AddedToChatEvent, bot: Bot) -> None:
-    new_members = []
-
-    for member in event.huids:
-        new_members.append(str(MentionBuilder.contact(member)))
+    new_members = [str(MentionBuilder.contact(member)) for member in event.huids]
 
     await bot.answer_message(f"Hello, {', '.join(new_members)}!")
 
 
 @collector.deleted_from_chat
 async def deleted_from_chat(event: DeletedFromChatEvent, bot: Bot) -> None:
-    deleted_members = []
+    if event.bot.id in event.huids:
+        return
 
-    for member in event.huids:
-        if member == event.bot.id:
-            return
-
-        deleted_members.append(str(MentionBuilder.contact(member)))
-
+    deleted_members = [str(MentionBuilder.contact(member)) for member in event.huids]
     await bot.answer_message(f"Bye, {', '.join(deleted_members)}!")
 
 
 @collector.left_from_chat
 async def left_from_chat(event: LeftFromChatEvent, bot: Bot) -> None:
-    left_members = []
+    if event.bot.id in event.huids:
+        return
 
-    for member in event.huids:
-        if member == event.bot.id:
-            return
-
-        left_members.append(str(MentionBuilder.contact(member)))
-
+    left_members = [str(MentionBuilder.contact(member)) for member in event.huids]
     await bot.answer_message(f"{', '.join(left_members)} left our chat!")
