@@ -1,12 +1,9 @@
 import json
-from pathlib import Path
 from typing import Any, Dict, Optional, Union, cast
 
 from aiofiles.tempfile import NamedTemporaryFile
 from pybotx import Bot, File
 from pybotx.models.attachments import IncomingFileAttachment, OutgoingAttachment
-
-from app.settings import settings
 
 BOTX_RESPONSE_LABEL_TEMPLATE = "**Status code:** `{status_code}`\n**Response payload:**"
 
@@ -59,11 +56,3 @@ async def get_request_payload(
         raise ValueError(f"**Error:**\n{embedded_decoding_exc}")
 
     return cast(Dict[str, Any], embedded_payload)
-
-
-async def get_file_paths() -> Dict[str, Path]:
-    file_paths = {}
-    for file_sample in settings.FILES_DIR.iterdir():
-        extension = "".join(file_sample.suffixes).removeprefix(".")
-        file_paths[extension] = file_sample
-    return file_paths

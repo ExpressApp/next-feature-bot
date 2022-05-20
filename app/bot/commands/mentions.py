@@ -1,6 +1,6 @@
 """Handlers for testing mentions."""
 
-from typing import List
+from typing import Sequence
 
 from pybotx import Bot, IncomingMessage, Mention, MentionBuilder
 
@@ -10,7 +10,7 @@ from app.bot.mentions import user_mentions_without_bot
 collector = HandlerCollectorWithHelp()
 
 
-def join_mentions(mentions_group: List[Mention]) -> str:
+def join_mentions(mentions_group: Sequence[Mention]) -> str:
     return ", ".join(str(mention) for mention in mentions_group)
 
 

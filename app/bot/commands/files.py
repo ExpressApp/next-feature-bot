@@ -13,7 +13,7 @@ from pybotx import (
     OutgoingAttachment,
 )
 
-from app.bot.botx_method_utils import get_file_paths
+from app.bot.file_utils import get_file_paths
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 
 collector = HandlerCollectorWithHelp()
