@@ -1,9 +1,7 @@
-import json
-
 from pybotx import Bot, InternalBotNotificationEvent
 
 from app.bot.botx_method_utils import send_json_snippet
-from app.bot.formatting import pformat_str_json
+from app.bot.formatting import pformat_json
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 
 collector = HandlerCollectorWithHelp()
@@ -16,6 +14,6 @@ async def internal_bot_notification_handler(
     await send_json_snippet(
         bot,
         "Received internal bot notification:",
-        pformat_str_json(json.dumps(event.data)),
+        pformat_json(event.data),
         "notification.json",
     )
