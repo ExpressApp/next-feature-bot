@@ -3,6 +3,7 @@
 from typing import Type, Union, cast
 
 from pybotx import Bot, BubbleMarkup, Button, IncomingMessage, KeyboardMarkup
+from pybotx.models.message.markup import ButtonTextAlign
 
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 from app.bot.regular_expressions import CREATE_MARKUP_ARGS_REGEXP
@@ -161,3 +162,39 @@ async def alert_buttons_handler(message: IncomingMessage, bot: Bot) -> None:
     )
 
     await bot.answer_message("Alert buttons:", bubbles=bubbles, keyboard=keyboard)
+
+
+@collector.command_with_help("/styled-buttons", description="Create styled buttons")
+async def styled_buttons(message: IncomingMessage, bot: Bot) -> None:
+    """`/bubble`
+
+    Create colorful bubbles.
+    """
+    bubbles = BubbleMarkup()
+
+    bubbles.add_button(
+        "/echo You love **blue** color!",
+        "Blue",
+        text_color="#FFFFFF",
+        background_color="#0275d8",
+        align=ButtonTextAlign.LEFT,
+        new_row=False,
+    )
+    bubbles.add_button(
+        "/echo You love **green** color!",
+        "Green",
+        text_color="#FFFFFF",
+        background_color="#5cb85c",
+        align=ButtonTextAlign.CENTER,
+        new_row=False,
+    )
+    bubbles.add_button(
+        "/echo You love **red** color!",
+        "Red",
+        text_color="#FFFFFF",
+        background_color="#d9534f",
+        align=ButtonTextAlign.RIGHT,
+        new_row=False,
+    )
+
+    await bot.answer_message("What color do you like?", bubbles=bubbles)
