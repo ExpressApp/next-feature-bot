@@ -166,14 +166,16 @@ async def alert_buttons_handler(message: IncomingMessage, bot: Bot) -> None:
 
 @collector.command_with_help("/styled-buttons", description="Create styled buttons")
 async def styled_buttons(message: IncomingMessage, bot: Bot) -> None:
-    """`/bubble`
+    """`/styled-buttons`
 
-    Create colorful bubbles.
+    Create colorful buttons.
+
+    This command doesn't accept arguments.
     """
     bubbles = BubbleMarkup()
 
     bubbles.add_button(
-        "/echo You love **blue** color!",
+        "/echo **Blue** bubble pressed.",
         "Blue",
         text_color="#FFFFFF",
         background_color="#0275d8",
@@ -181,7 +183,7 @@ async def styled_buttons(message: IncomingMessage, bot: Bot) -> None:
         new_row=False,
     )
     bubbles.add_button(
-        "/echo You love **green** color!",
+        "/echo **Green** bubble pressed.",
         "Green",
         text_color="#FFFFFF",
         background_color="#5cb85c",
@@ -189,7 +191,7 @@ async def styled_buttons(message: IncomingMessage, bot: Bot) -> None:
         new_row=False,
     )
     bubbles.add_button(
-        "/echo You love **red** color!",
+        "/echo **Red** bubble pressed.",
         "Red",
         text_color="#FFFFFF",
         background_color="#d9534f",
@@ -197,4 +199,31 @@ async def styled_buttons(message: IncomingMessage, bot: Bot) -> None:
         new_row=False,
     )
 
-    await bot.answer_message("What color do you like?", bubbles=bubbles)
+    keyboard = KeyboardMarkup()
+
+    keyboard.add_button(
+        "/echo **Blue** keyboard pressed.",
+        "Blue",
+        text_color="#FFFFFF",
+        background_color="#0275d8",
+        align=ButtonTextAlign.LEFT,
+        new_row=False,
+    )
+    keyboard.add_button(
+        "/echo **Green** keyboard pressed.",
+        "Green",
+        text_color="#FFFFFF",
+        background_color="#5cb85c",
+        align=ButtonTextAlign.CENTER,
+        new_row=False,
+    )
+    keyboard.add_button(
+        "/echo **Red** keyboard pressed.",
+        "Red",
+        text_color="#FFFFFF",
+        background_color="#d9534f",
+        align=ButtonTextAlign.RIGHT,
+        new_row=False,
+    )
+
+    await bot.answer_message("Styled buttons:", bubbles=bubbles, keyboard=keyboard)
