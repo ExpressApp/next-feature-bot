@@ -2,7 +2,7 @@ from uuid import UUID
 
 from pybotx import Bot, IncomingMessage
 
-from app.bot.debug_messages import toggle_chat_debug
+from app.bot.debug_messages import subscribers_by_chat
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 
 collector = HandlerCollectorWithHelp()
@@ -21,10 +21,11 @@ async def debug_toggle(message: IncomingMessage, bot: Bot) -> None:
     ```
     """
     chat_id = UUID(message.argument)
-    is_enabled = toggle_chat_debug(message.chat.id, chat_id)
+    is_enabled = subscribers_by_chat.toggle(message.chat.id, chat_id)
 
     if is_enabled:
-        await bot.answer_message(f"Debug mode for chat `{chat_id}` is **enabled**.")
-        return
+        text = f"Debug mode for chat `{chat_id}` is **enabled**."
+    else:
+        text = f"Debug mode for chat `{chat_id}` is **disabled**."
 
-    await bot.answer_message(f"Debug mode for chat `{chat_id}` is **disabled**.")
+    await bot.answer_message(text)
