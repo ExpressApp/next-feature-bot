@@ -12,9 +12,9 @@ async def internal_bot_notification_handler(
     event: InternalBotNotificationEvent, bot: Bot
 ) -> None:
     await send_json_snippet(
+        bot,
         event.bot.id,
         event.chat.id,
-        bot,
         "Received internal bot notification:",
         pformat_json(event.data),
         "notification.json",

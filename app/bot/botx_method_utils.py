@@ -10,9 +10,9 @@ BOTX_RESPONSE_LABEL_TEMPLATE = "**Status code:** `{status_code}`\n**Response pay
 
 
 async def send_json_snippet(
+    bot: Bot,
     bot_id: UUID,
     chat_id: UUID,
-    bot: Bot,
     label: str,
     snippet: str,
     filename: str,

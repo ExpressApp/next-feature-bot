@@ -2,6 +2,7 @@
 
 from typing import Dict, Set
 from uuid import UUID
+from collections import defaultdict
 
 
 class CTSEventsListeners:
@@ -20,19 +21,22 @@ class CTSEventsListeners:
 
 class DebugSubscribers:
     def __init__(self) -> None:
-        self._subscribers: Dict[UUID, Set[UUID]] = {}
+        self._subscribers: Dict[UUID, Set[UUID]] = defaultdict(set)
 
     def add(self, subscriber_id: UUID, chat_id: UUID) -> None:
-        self._subscribers.setdefault(chat_id, set()).add(subscriber_id)
+        self._subscribers[chat_id].add(subscriber_id)
 
     def remove(self, subscriber_id: UUID, chat_id: UUID) -> None:
-        self._subscribers.setdefault(chat_id, set()).discard(subscriber_id)
+        self._subscribers[chat_id].discard(subscriber_id)
 
     def get(self, chat_id: UUID) -> Set[UUID]:
-        return self._subscribers.setdefault(chat_id, set()).copy()
+        if chat_id not in self._subscribers:
+            return set()
+
+        return self._subscribers[chat_id].copy()
 
     def toggle(self, subscriber_id: UUID, chat_id: UUID) -> bool:
-        if subscriber_id in self._subscribers.setdefault(chat_id, set()):
+        if subscriber_id in self.get(chat_id):
             self.remove(subscriber_id, chat_id)
             return False
 

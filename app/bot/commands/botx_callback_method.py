@@ -170,14 +170,14 @@ async def botx_callback_method_handler(  # noqa: WPS210, WPS217
     label = BOTX_RESPONSE_LABEL_TEMPLATE.format(status_code=call_result.status_code)
     response_payload = pformat_str_json(call_result.raw_payload)
     await send_json_snippet(
-        message.bot.id, message.chat.id, bot, label, response_payload, "payload.json"
+        bot, message.bot.id, message.chat.id, label, response_payload, "payload.json"
     )
 
     callback_payload = pformat_str_json(callback.json())
     await send_json_snippet(
+        bot,
         message.bot.id,
         message.chat.id,
-        bot,
         "**Callback:**",
         callback_payload,
         "callback.json",
