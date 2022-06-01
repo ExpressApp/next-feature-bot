@@ -18,6 +18,7 @@ from app.bot.commands import (
     spam,
     special_messages,
 )
+from app.bot.debug_messages import debug_incoming_message_middleware
 from app.bot.error_handlers.internal_error import internal_error_handler
 from app.settings import settings
 
@@ -41,4 +42,5 @@ bot = BotWithHelp(
     ],
     bot_accounts=settings.BOT_CREDENTIALS,
     exception_handlers={Exception: internal_error_handler},
+    middlewares=[debug_incoming_message_middleware],
 )

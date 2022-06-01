@@ -14,7 +14,6 @@ from pybotx import (
 )
 
 from app.api.dependencies.bot import bot_dependency
-from app.bot.debug_messages import send_debug_message_for_incoming_request
 from app.logger import logger
 
 router = APIRouter()
@@ -23,12 +22,8 @@ router = APIRouter()
 @router.post("/command")
 async def command_handler(request: Request, bot: Bot = bot_dependency) -> JSONResponse:
     """Receive commands from users. Max timeout - 5 seconds."""
-
-    request_payload = await request.json()
-    await send_debug_message_for_incoming_request(request_payload, bot)
-
     try:
-        bot.async_execute_raw_bot_command(request_payload)
+        bot.async_execute_raw_bot_command(await request.json())
     except UnknownSystemEventError as unknown_event_exc:
         logger.warning(f"Received unknown system event `{unknown_event_exc.type_name}`")
 

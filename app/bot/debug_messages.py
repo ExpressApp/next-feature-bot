@@ -1,31 +1,32 @@
-from typing import Any, Dict
-from uuid import UUID
+from pybotx import (
+    Bot,
+    BotIsNotChatMemberError,
+    IncomingMessage,
+    IncomingMessageHandlerFunc,
+)
 
-from pybotx import Bot, BotIsNotChatMemberError
-
+from app.bot.botx_method_utils import send_json_snippet
 from app.bot.datastructures import DebugSubscribers
 from app.bot.formatting import pformat_json
-from app.logger import logger
 
 subscribers_by_chat = DebugSubscribers()
 
 
-async def send_debug_message_for_incoming_request(
-    raw_bot_message: Dict[str, Any], bot: Bot
+async def debug_incoming_message_middleware(
+    message: IncomingMessage, bot: Bot, call_next: IncomingMessageHandlerFunc
 ) -> None:
-    try:  # noqa: WPS:229
-        chat_id = UUID(raw_bot_message["from"]["group_chat_id"])
-        bot_id = UUID(raw_bot_message["bot_id"])
-    except KeyError:
-        logger.warning("Unable to parse incoming request for debug")
-        return
-
-    for subscriber_id in subscribers_by_chat.get_subscribers_by_chat(chat_id):
+    for subscriber_id in subscribers_by_chat.get(message.chat.id):
         try:
-            await bot.send_message(
-                bot_id=bot_id,
-                chat_id=subscriber_id,
-                body=f"Incoming request:\n```\n{pformat_json(raw_bot_message)}\n```",
+            await send_json_snippet(
+                bot,
+                "Incoming request:",
+                pformat_json(message.raw_command),
+                "request.json",
+                bot_id=message.bot.id,
+                recipient=subscriber_id,
             )
         except BotIsNotChatMemberError:
-            subscribers_by_chat.toggle(subscriber_id, chat_id)
+            print("Deleting~")
+            subscribers_by_chat.remove(subscriber_id, message.chat.id)
+
+    await call_next(message, bot)

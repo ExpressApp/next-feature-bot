@@ -23,9 +23,9 @@ async def debug_toggle(message: IncomingMessage, bot: Bot) -> None:
     chat_id = UUID(message.argument)
     is_enabled = subscribers_by_chat.toggle(message.chat.id, chat_id)
 
-    if is_enabled:
-        text = f"Debug mode for chat `{chat_id}` is **enabled**."
-    else:
-        text = f"Debug mode for chat `{chat_id}` is **disabled**."
+    text = (
+        f"Debug mode for chat `{chat_id}` is "
+        f"**{'enabled' if is_enabled else 'disabled'}**."
+    )
 
     await bot.answer_message(text)

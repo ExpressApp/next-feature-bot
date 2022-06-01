@@ -22,6 +22,18 @@ class DebugSubscribers:
     def __init__(self) -> None:
         self._subscribers: Dict[UUID, Set[UUID]] = {}
 
+    def add(self, subscriber_id: UUID, chat_id: UUID) -> None:
+        self._subscribers.setdefault(chat_id, set()).add(subscriber_id)
+
+    def remove(self, subscriber_id: UUID, chat_id: UUID) -> None:
+        self._subscribers[chat_id].discard(subscriber_id)
+
+    def get(self, chat_id: UUID) -> Set[UUID]:
+        if chat_id not in self._subscribers:
+            return set()
+
+        return self._subscribers[chat_id].copy()
+
     def toggle(self, subscriber_id: UUID, chat_id: UUID) -> bool:
         if chat_id not in self._subscribers:
             self._subscribers[chat_id] = {subscriber_id}
@@ -33,9 +45,3 @@ class DebugSubscribers:
 
         self._subscribers[chat_id].remove(subscriber_id)
         return False
-
-    def get_subscribers_by_chat(self, chat_id: UUID) -> Set[UUID]:
-        if chat_id not in self._subscribers:
-            return set()
-
-        return self._subscribers[chat_id].copy()
