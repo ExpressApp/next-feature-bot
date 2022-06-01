@@ -10,22 +10,18 @@ BOTX_RESPONSE_LABEL_TEMPLATE = "**Status code:** `{status_code}`\n**Response pay
 
 
 async def send_json_snippet(
+    bot_id: UUID,
+    chat_id: UUID,
     bot: Bot,
     label: str,
     snippet: str,
     filename: str,
-    recipient: Optional[UUID] = None,
-    bot_id: Optional[UUID] = None,
 ) -> None:
     maximum_text_length = 4096
     text = label + f"\n```json\n{snippet}\n```"
 
     if len(text) <= maximum_text_length:
-        if recipient and bot_id:
-            await bot.send_message(bot_id=bot_id, chat_id=recipient, body=text)
-            return
-
-        await bot.answer_message(text)
+        await bot.send_message(bot_id=bot_id, chat_id=chat_id, body=text)
         return
 
     async with NamedTemporaryFile("wb+") as async_buffer:
@@ -36,13 +32,9 @@ async def send_json_snippet(
             async_buffer, filename
         )
 
-    if recipient and bot_id:
-        await bot.send_message(
-            bot_id=bot_id, chat_id=recipient, body=label, file=payload_file
-        )
-        return
-
-    await bot.answer_message(label, file=payload_file)
+    await bot.send_message(
+        bot_id=bot_id, chat_id=chat_id, body=label, file=payload_file
+    )
 
 
 async def get_request_payload(

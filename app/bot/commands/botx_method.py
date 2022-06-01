@@ -113,4 +113,6 @@ async def botx_method_handler(  # noqa: WPS210, WPS217
 
     label = BOTX_RESPONSE_LABEL_TEMPLATE.format(status_code=call_result.status_code)
     response_payload = pformat_str_json(call_result.payload)
-    await send_json_snippet(bot, label, response_payload, "payload.json")
+    await send_json_snippet(
+        message.bot.id, message.chat.id, bot, label, response_payload, "payload.json"
+    )

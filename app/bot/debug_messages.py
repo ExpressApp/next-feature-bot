@@ -21,12 +21,12 @@ async def debug_incoming_message_middleware(
     for subscriber_id in subscribers_by_chat.get(message.chat.id):
         try:
             await send_json_snippet(
+                message.bot.id,
+                subscriber_id,
                 bot,
                 "Incoming request:",
                 pformat_json(raw_command),
                 "request.json",
-                bot_id=message.bot.id,
-                recipient=subscriber_id,
             )
         except BotIsNotChatMemberError:
             subscribers_by_chat.remove(subscriber_id, message.chat.id)
