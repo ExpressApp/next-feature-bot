@@ -4,7 +4,6 @@ from uuid import UUID
 
 from aiofiles.tempfile import NamedTemporaryFile
 from pybotx import Bot, File
-from pybotx.missing import Missing, Undefined
 from pybotx.models.attachments import IncomingFileAttachment, OutgoingAttachment
 
 BOTX_RESPONSE_LABEL_TEMPLATE = "**Status code:** `{status_code}`\n**Response payload:**"
@@ -18,22 +17,15 @@ async def send_json_snippet(
     recipient: Optional[UUID] = None,
     bot_id: Optional[UUID] = None,
 ) -> None:
-    async def send_message(  # noqa: WPS430
-        text: str, attachment: Missing[OutgoingAttachment] = Undefined
-    ) -> None:
-        if recipient and bot_id:
-            await bot.send_message(
-                bot_id=bot_id, chat_id=recipient, body=text, file=attachment
-            )
-            return
-
-        await bot.answer_message(text, file=attachment)
-
     maximum_text_length = 4096
     text = label + f"\n```json\n{snippet}\n```"
 
     if len(text) <= maximum_text_length:
-        await send_message(text)
+        if recipient and bot_id:
+            await bot.send_message(bot_id=bot_id, chat_id=recipient, body=text)
+            return
+
+        await bot.answer_message(text)
         return
 
     async with NamedTemporaryFile("wb+") as async_buffer:
@@ -44,7 +36,13 @@ async def send_json_snippet(
             async_buffer, filename
         )
 
-    await send_message(label, payload_file)
+    if recipient and bot_id:
+        await bot.send_message(
+            bot_id=bot_id, chat_id=recipient, body=label, file=payload_file
+        )
+        return
+
+    await bot.answer_message(label, file=payload_file)
 
 
 async def get_request_payload(
