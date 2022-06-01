@@ -26,22 +26,15 @@ class DebugSubscribers:
         self._subscribers.setdefault(chat_id, set()).add(subscriber_id)
 
     def remove(self, subscriber_id: UUID, chat_id: UUID) -> None:
-        self._subscribers[chat_id].discard(subscriber_id)
+        self._subscribers.setdefault(chat_id, set()).discard(subscriber_id)
 
     def get(self, chat_id: UUID) -> Set[UUID]:
-        if chat_id not in self._subscribers:
-            return set()
-
-        return self._subscribers[chat_id].copy()
+        return self._subscribers.setdefault(chat_id, set()).copy()
 
     def toggle(self, subscriber_id: UUID, chat_id: UUID) -> bool:
-        if chat_id not in self._subscribers:
-            self._subscribers[chat_id] = {subscriber_id}
-            return True
+        if subscriber_id in self._subscribers.setdefault(chat_id, set()):
+            self.remove(subscriber_id, chat_id)
+            return False
 
-        if subscriber_id not in self._subscribers[chat_id]:
-            self._subscribers[chat_id].add(subscriber_id)
-            return True
-
-        self._subscribers[chat_id].remove(subscriber_id)
-        return False
+        self.add(subscriber_id, chat_id)
+        return True

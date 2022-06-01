@@ -26,7 +26,6 @@ async def debug_incoming_message_middleware(
                 recipient=subscriber_id,
             )
         except BotIsNotChatMemberError:
-            print("Deleting~")
             subscribers_by_chat.remove(subscriber_id, message.chat.id)
 
     await call_next(message, bot)
