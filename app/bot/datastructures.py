@@ -1,8 +1,8 @@
 """Datastructures to help testing."""
 
+from collections import defaultdict
 from typing import Dict, Set
 from uuid import UUID
-from collections import defaultdict
 
 
 class CTSEventsListeners:
