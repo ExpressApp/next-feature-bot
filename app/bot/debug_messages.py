@@ -1,3 +1,5 @@
+from typing import Any, Dict, cast
+
 from pybotx import (
     Bot,
     BotIsNotChatMemberError,
@@ -15,12 +17,13 @@ subscribers_by_chat = DebugSubscribers()
 async def debug_incoming_message_middleware(
     message: IncomingMessage, bot: Bot, call_next: IncomingMessageHandlerFunc
 ) -> None:
+    raw_command = cast(Dict[str, Any], message.raw_command)
     for subscriber_id in subscribers_by_chat.get(message.chat.id):
         try:
             await send_json_snippet(
                 bot,
                 "Incoming request:",
-                pformat_json(message.raw_command),
+                pformat_json(raw_command),
                 "request.json",
                 bot_id=message.bot.id,
                 recipient=subscriber_id,
