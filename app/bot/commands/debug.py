@@ -8,11 +8,14 @@ from app.bot.handler_with_help import HandlerCollectorWithHelp
 collector = HandlerCollectorWithHelp()
 
 
-@collector.command_with_help("/debug-toggle", description="Toggle debug mode for chat")
+@collector.command_with_help(
+    "/debug-toggle", description="Toggle debug mode for a specific chat"
+)
 async def debug_toggle(message: IncomingMessage, bot: Bot) -> None:
     """`/debug-toggle chat_id`
 
-    Send requests from chat.
+    Toggle debug mode for a specific chat. All incoming and outgoing requests
+    from there will be sent to this chat.
 
     • `chat_id` - UUID of target chat.
 
