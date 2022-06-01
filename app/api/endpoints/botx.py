@@ -22,11 +22,10 @@ router = APIRouter()
 @router.post("/command")
 async def command_handler(request: Request, bot: Bot = bot_dependency) -> JSONResponse:
     """Receive commands from users. Max timeout - 5 seconds."""
-
     try:
         bot.async_execute_raw_bot_command(await request.json())
     except UnknownSystemEventError as unknown_event_exc:
-        logger.warning(f"Recieved unknown system event `{unknown_event_exc.type_name}`")
+        logger.warning(f"Received unknown system event `{unknown_event_exc.type_name}`")
 
         # It's not an error, bot shouldn't fail on new system events
         return JSONResponse(

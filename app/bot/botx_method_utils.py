@@ -1,5 +1,6 @@
 import json
 from typing import Any, Dict, Optional, Union, cast
+from uuid import UUID
 
 from aiofiles.tempfile import NamedTemporaryFile
 from pybotx import Bot, File
@@ -8,12 +9,19 @@ from pybotx.models.attachments import IncomingFileAttachment, OutgoingAttachment
 BOTX_RESPONSE_LABEL_TEMPLATE = "**Status code:** `{status_code}`\n**Response payload:**"
 
 
-async def send_json_snippet(bot: Bot, label: str, snippet: str, filename: str) -> None:
+async def send_json_snippet(
+    bot: Bot,
+    bot_id: UUID,
+    chat_id: UUID,
+    label: str,
+    snippet: str,
+    filename: str,
+) -> None:
     maximum_text_length = 4096
     text = label + f"\n```json\n{snippet}\n```"
 
     if len(text) <= maximum_text_length:
-        await bot.answer_message(text)
+        await bot.send_message(bot_id=bot_id, chat_id=chat_id, body=text)
         return
 
     async with NamedTemporaryFile("wb+") as async_buffer:
@@ -24,7 +32,9 @@ async def send_json_snippet(bot: Bot, label: str, snippet: str, filename: str) -
             async_buffer, filename
         )
 
-    await bot.answer_message(label, file=payload_file)
+    await bot.send_message(
+        bot_id=bot_id, chat_id=chat_id, body=label, file=payload_file
+    )
 
 
 async def get_request_payload(
