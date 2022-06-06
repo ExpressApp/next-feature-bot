@@ -1,10 +1,12 @@
 import json
-from typing import Any, Dict, Optional, Union, cast
+from typing import Any, Dict, List, Optional, Union, cast
 from uuid import UUID
 
 from aiofiles.tempfile import NamedTemporaryFile
-from pybotx import Bot, File
+from pybotx import Bot, ChatTypes, File, MentionChat
 from pybotx.models.attachments import IncomingFileAttachment, OutgoingAttachment
+
+from app.bot.answer_error_exceptions import AnswerMessageError
 
 BOTX_RESPONSE_LABEL_TEMPLATE = "**Status code:** `{status_code}`\n**Response payload:**"
 
@@ -66,3 +68,26 @@ async def get_request_payload(
         raise ValueError(f"**Error:**\n{embedded_decoding_exc}")
 
     return cast(Dict[str, Any], embedded_payload)
+
+
+async def personal_chat_id_by_huid(bot: Bot, bot_id: UUID, huid: UUID) -> UUID:
+    for chat in await bot.list_chats(bot_id=bot_id):
+        if chat.chat_type == ChatTypes.PERSONAL_CHAT and huid in chat.members:
+            return chat.chat_id
+
+    raise AnswerMessageError("**Error:** You do not have chat with this bot")
+
+
+async def existing_group_chat_id_from_mentions(
+    bot: Bot, bot_id: UUID, mentions: List[MentionChat]
+) -> UUID:
+    try:
+        chat_id = mentions[0].entity_id
+    except IndexError:
+        raise AnswerMessageError("**Error:** Missing required arguments")
+
+    for chat in await bot.list_chats(bot_id=bot_id):
+        if chat.chat_id == chat_id:
+            return chat_id
+
+    raise AnswerMessageError("**Error:** I am not a member of this chat")
