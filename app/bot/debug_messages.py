@@ -5,6 +5,7 @@ from pybotx import (
     BotIsNotChatMemberError,
     IncomingMessage,
     IncomingMessageHandlerFunc,
+    MentionBuilder,
 )
 
 from app.bot.botx_method_utils import send_json_snippet
@@ -24,7 +25,7 @@ async def debug_incoming_message_middleware(
                 bot,
                 message.bot.id,
                 subscriber_id,
-                "Incoming request:",
+                f"Incoming request from chat {MentionBuilder.chat(message.chat.id)}:",
                 pformat_json(raw_command),
                 "request.json",
             )
