@@ -1,8 +1,8 @@
 from pybotx import Bot, IncomingMessage, MentionBuilder
 
 from app.bot.botx_method_utils import (
-    existing_group_chat_id_from_mentions,
-    personal_chat_id_by_huid,
+    find_personal_chat_id_by_huid,
+    get_group_chat_id_from_mentions,
 )
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 from app.bot.middlewares.debug_messages import subscribers_by_chat
@@ -14,12 +14,12 @@ collector = HandlerCollectorWithHelp()
     "/debug-toggle", description="Toggle debug mode for a specific chat"
 )
 async def debug_toggle(message: IncomingMessage, bot: Bot) -> None:
-    """`/debug-toggle chat`
+    """`/debug-toggle ##chat`
 
     Toggle debug mode for a specific chat. All incoming and outgoing requests
     from there will be sent to the chat where this command was sent.
 
-    • `chat` - mention of target chat or `self` for personal chat with bot.
+    • `##chat` - mention of target chat or `self` for personal chat with bot.
 
     ```bash
     /debug-toggle ##Chat
@@ -27,11 +27,11 @@ async def debug_toggle(message: IncomingMessage, bot: Bot) -> None:
     ```
     """
     if message.argument == "self":
-        chat_id = await personal_chat_id_by_huid(
+        chat_id = await find_personal_chat_id_by_huid(
             bot, message.bot.id, message.sender.huid
         )
     else:
-        chat_id = await existing_group_chat_id_from_mentions(
+        chat_id = await get_group_chat_id_from_mentions(
             bot, message.bot.id, message.mentions.chats
         )
 

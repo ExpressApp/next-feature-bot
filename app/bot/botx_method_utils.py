@@ -70,15 +70,15 @@ async def get_request_payload(
     return cast(Dict[str, Any], embedded_payload)
 
 
-async def personal_chat_id_by_huid(bot: Bot, bot_id: UUID, huid: UUID) -> UUID:
+async def find_personal_chat_id_by_huid(bot: Bot, bot_id: UUID, huid: UUID) -> UUID:
     for chat in await bot.list_chats(bot_id=bot_id):
         if chat.chat_type == ChatTypes.PERSONAL_CHAT and huid in chat.members:
             return chat.chat_id
 
-    raise AnswerMessageError("**Error:** You do not have chat with this bot")
+    raise AnswerMessageError("**Error:** You do not have personal chat with this bot")
 
 
-async def existing_group_chat_id_from_mentions(
+async def get_group_chat_id_from_mentions(
     bot: Bot, bot_id: UUID, mentions: List[MentionChat]
 ) -> UUID:
     try:
