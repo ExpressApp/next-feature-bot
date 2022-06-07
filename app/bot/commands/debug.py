@@ -1,4 +1,4 @@
-from pybotx import Bot, IncomingMessage, MentionBuilder
+from pybotx import Bot, IncomingMessage, Mention, MentionBuilder
 
 from app.bot.debug_utils import (
     find_personal_chat_id_by_huid,
@@ -26,19 +26,22 @@ async def debug_toggle(message: IncomingMessage, bot: Bot) -> None:
     /debug-toggle self
     ```
     """
+    mention: Mention
     if message.argument == "self":
         chat_id = await find_personal_chat_id_by_huid(
             bot, message.bot.id, message.sender.huid
         )
+        mention = MentionBuilder.contact(message.bot.id)
     else:
         chat_id = await get_group_chat_id_from_mentions(
             bot, message.bot.id, message.mentions.chats
         )
+        mention = MentionBuilder.chat(chat_id)
 
     is_enabled = subscribers_by_chat.toggle(message.chat.id, chat_id)
 
     text = (
-        f"Debug mode for chat {MentionBuilder.chat(chat_id)} is "
+        f"Debug mode for chat {mention} is "
         f"**{'enabled' if is_enabled else 'disabled'}**."
     )
 
