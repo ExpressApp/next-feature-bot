@@ -1,6 +1,6 @@
 from pybotx import Bot, IncomingMessage, MentionBuilder
 
-from app.bot.botx_method_utils import (
+from app.bot.debug_utils import (
     find_personal_chat_id_by_huid,
     get_group_chat_id_from_mentions,
 )
