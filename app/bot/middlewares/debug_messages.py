@@ -33,7 +33,7 @@ async def debug_incoming_message_middleware(
                 bot,
                 message.bot.id,
                 subscriber_id,
-                f"Incoming request from chat {mention}:",
+                f"Incoming request from {mention}:",
                 pformat_json(raw_command),
                 "request.json",
             )
