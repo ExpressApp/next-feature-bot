@@ -41,7 +41,7 @@ async def debug_toggle(message: IncomingMessage, bot: Bot) -> None:
     is_enabled = subscribers_by_chat.toggle(message.chat.id, chat_id)
 
     text = (
-        f"Debug mode for chat {mention} is "
+        f"Debug mode for {mention} is "
         f"**{'enabled' if is_enabled else 'disabled'}**."
     )
 
