@@ -1,6 +1,6 @@
 """Application settings."""
 from pathlib import Path
-from typing import Any, List
+from typing import Any, List, Optional
 from uuid import UUID
 
 from pybotx import BotAccountWithSecret
@@ -19,6 +19,9 @@ class AppSettings(BaseSettings):
     DEBUG: bool = False
 
     FILES_DIR: Path = Path("files")
+
+    CUSTOM_CA_CERT_PATH: Optional[str]
+    CUSTOM_CLIENT_CERT_PATH: Optional[str]
 
     @validator("BOT_CREDENTIALS", pre=True)
     @classmethod

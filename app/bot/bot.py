@@ -1,5 +1,7 @@
 """Configuration for bot instance."""
 
+from httpx import AsyncClient
+
 from app.bot.bot_with_help import BotWithHelp
 from app.bot.commands import (
     administration,
@@ -24,6 +26,10 @@ from app.bot.middlewares.debug_messages import debug_incoming_message_middleware
 from app.settings import settings
 
 bot = BotWithHelp(
+    httpx_client=AsyncClient(
+        verify=settings.CUSTOM_CA_CERT_PATH or True,  # custom or default
+        cert=settings.CUSTOM_CLIENT_CERT_PATH or None,  # type: ignore
+    ),
     collectors=[
         administration.collector,
         botx_callback_method.collector,
