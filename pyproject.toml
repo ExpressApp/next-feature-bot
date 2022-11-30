@@ -14,7 +14,7 @@ pybotx = { path = "./pybotx-submodule", develop = true }
 fastapi = "~0.75.0 "
 pydantic = { version = "~1.8.2", extras = ["dotenv"] }
 uvicorn = "~0.15.0"
-mako = "~1.1.6"
+mako = "^1.2.2"
 httpcore = "~0.16.1"
 aiocsv = "~1.2.3"
 
