@@ -28,3 +28,9 @@ SEARCH_USER_REGEXP = re.compile(
     r"|^(?P<by_email>email)\s+(?P<email>\S+@\S+\.\S+)$"
 )
 SPAM_ARGS_REGEXP = re.compile(r"^(?P<quantity>\d+)(\s+(?P<delay>\d+))?$")
+
+USERS_AS_CSV_REGEXP = re.compile(
+    r"^(?P<cts_user>(true|false)(\s|$))?"
+    r"(?P<unregistered>(true|false)(\s|$))?"
+    "(?P<botx>true|false)?$"
+)
