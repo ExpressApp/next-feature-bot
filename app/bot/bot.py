@@ -17,6 +17,7 @@ from app.bot.commands import (
     search,
     spam,
     special_messages,
+    users_as_csv,
 )
 from app.bot.error_handlers.internal_error import internal_error_handler
 from app.bot.middlewares.answer_error_message import answer_error_middleware
@@ -40,6 +41,7 @@ bot = BotWithHelp(
         special_messages.collector,
         internal_bot_notification.collector,
         debug.collector,
+        users_as_csv.collector,
     ],
     bot_accounts=settings.BOT_CREDENTIALS,
     exception_handlers={Exception: internal_error_handler},
