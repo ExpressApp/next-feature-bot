@@ -11,7 +11,7 @@ authors = []
 python = "~3.10"
 
 pybotx = { path = "./pybotx-submodule", develop = true }
-fastapi = "~0.75.0 "
+fastapi = "~0.95.2"
 pydantic = { version = "~1.8.2", extras = ["dotenv"] }
 uvicorn = "~0.15.0"
 mako = "^1.2.2"
