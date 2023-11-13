@@ -22,6 +22,7 @@ router = APIRouter()
 @router.post("/command")
 async def command_handler(request: Request, bot: Bot = bot_dependency) -> JSONResponse:
     """Receive commands from users. Max timeout - 5 seconds."""
+    logger.debug(f"Command headers: {request.headers}")
     try:
         bot.async_execute_raw_bot_command(await request.json())
     except UnknownSystemEventError as unknown_event_exc:
