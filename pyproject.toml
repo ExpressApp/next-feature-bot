@@ -11,20 +11,24 @@ authors = []
 python = "~3.10"
 
 pybotx = { path = "./pybotx-submodule", develop = true }
-fastapi = "~0.95.2"
-pydantic = { version = "~1.8.2", extras = ["dotenv"] }
-uvicorn = "~0.15.0"
+fastapi = "~0.103.0"
+pydantic = { version = "~1.10.11", extras = ["dotenv"] }
+uvicorn = "~0.23.2"
 mako = "^1.2.2"
-httpcore = "~0.16.1"
+httpcore = "~1.0.2"
 aiocsv = "~1.2.3"
+
+# Dependabot alerts
+certifi = ">=2015.4.28,<2023.7.22"
+GitPython = "<3.1.32"
 
 
 [tool.poetry.dev-dependencies]
 autoflake = "1.4.0"
 black = "22.3.0"
 isort = "5.10.1"
-mypy = "0.910.0"
-wemake-python-styleguide = "0.15.3"
+mypy = "~1.0.1"
+wemake-python-styleguide = "0.16.0"
 
 flake8-bandit = "2.1.2"  # https://github.com/PyCQA/bandit/issues/837
 bandit = "1.7.2"  # https://github.com/PyCQA/bandit/issues/837
