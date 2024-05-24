@@ -3,13 +3,14 @@ from pathlib import Path
 from typing import Any, List
 from uuid import UUID
 
+from pydantic_settings import BaseSettings, SettingsConfigDict
+
 from pybotx import BotAccountWithSecret
-from pydantic import BaseSettings, validator
+from pydantic import validator
 
 
 class AppSettings(BaseSettings):
-    class Config:  # noqa: WPS431
-        env_file = ".env"
+    model_config = SettingsConfigDict(env_file = ".env")
 
     # TODO: Change type to `List[BotAccount]` after closing:
     # https://github.com/samuelcolvin/pydantic/issues/1458
@@ -37,15 +38,21 @@ class AppSettings(BaseSettings):
 
     @classmethod
     def _build_credentials_from_string(
-        cls, credentials_str: str
+            cls, credentials_str: str
     ) -> BotAccountWithSecret:
         credentials_str = credentials_str.replace("|", "@")
         assert credentials_str.count("@") == 2, "Have you forgot to add `bot_id`?"
 
-        host, secret_key, bot_id = [
+        cts_url, secret_key, bot_id = [
             str_value.strip() for str_value in credentials_str.split("@")
         ]
-        return BotAccountWithSecret(host=host, secret_key=secret_key, id=UUID(bot_id))
+
+        if "://" not in cts_url:
+            cts_url = f"https://{cts_url}"
+
+        return BotAccountWithSecret(
+            id=UUID(bot_id), cts_url=cts_url, secret_key=secret_key
+        )
 
 
 settings = AppSettings()
