@@ -1,4 +1,4 @@
-FROM python:3.10-slim
+FROM registry.ccsteam.ru/bots-cicd-images/python:3.11.5-slim
 
 # Immediately write to stdout, don't use buffer
 ENV PYTHONUNBUFFERED 1
