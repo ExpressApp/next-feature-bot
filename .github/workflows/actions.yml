@@ -1,18 +1,6 @@
 name: Python application
 on: push
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-20.04
-
-    steps:
-      - name: Checkout repository and submodules
-        uses: actions/checkout@v2
-        with:
-          submodules: recursive
-
-      - name: Build bot image
-        run: docker build -t next-feature-bot .
 
   lint:
     name: Lint
