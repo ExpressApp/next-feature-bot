@@ -15,7 +15,7 @@
 2. Скачайте репозиторий на сервер:
 
 ```bash
-git clone <THIS_REPOSITORY> /opt/express/bots/next-feature-bot
+git clone --recurse-submodules https://github.com/ExpressApp/next-feature-bot.git /opt/express/bots/next-feature-bot
 cd /opt/express/bots/next-feature-bot
 ```
 
