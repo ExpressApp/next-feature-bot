@@ -1,5 +1,4 @@
 """Handlers for markup experiments."""
-
 from typing import Type, Union, cast
 
 from pybotx import Bot, BubbleMarkup, Button, IncomingMessage, KeyboardMarkup
@@ -23,7 +22,9 @@ def _create_markup(
     for index in range(rows * columns):
         new_row = index % columns == 0
         bubbles.add_button(
-            f"/echo Your pressed button **{index}**", str(index), new_row=new_row
+            command=f"/echo Your pressed button **{index}**",
+            label=str(index),
+            new_row=new_row,
         )
 
     return bubbles
