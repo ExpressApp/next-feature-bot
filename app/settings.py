@@ -45,7 +45,11 @@ class AppSettings(BaseSettings):
         host, secret_key, bot_id = [
             str_value.strip() for str_value in credentials_str.split("@")
         ]
-        return BotAccountWithSecret(host=host, secret_key=secret_key, id=UUID(bot_id))
+        return BotAccountWithSecret(
+            cts_url=host,
+            secret_key=secret_key,
+            id=UUID(bot_id),
+        )
 
 
 settings = AppSettings()

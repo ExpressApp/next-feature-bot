@@ -41,7 +41,11 @@ async def add_credentials_handler(message: IncomingMessage, bot: Bot) -> None:
 
     # Normally bot accounts doesn't added on the fly
     bot._bot_accounts_storage._bot_accounts.append(  # noqa: WPS437
-        BotAccountWithSecret(id=bot_id, host=host, secret_key=secret_key)
+        BotAccountWithSecret(
+            id=bot_id,
+            cts_url=host,
+            secret_key=secret_key,
+        )
     )
 
     await bot.answer_message("Credentials was added")
