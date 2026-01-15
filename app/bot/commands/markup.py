@@ -23,7 +23,9 @@ def _create_markup(
     for index in range(rows * columns):
         new_row = index % columns == 0
         bubbles.add_button(
-            f"/echo Your pressed button **{index}**", str(index), new_row=new_row
+            command=f"/echo Your pressed button **{index}**",
+            label=str(index),
+            new_row=new_row,
         )
 
     return bubbles
@@ -175,24 +177,24 @@ async def styled_buttons(message: IncomingMessage, bot: Bot) -> None:
     bubbles = BubbleMarkup()
 
     bubbles.add_button(
-        "/echo **Blue** bubble pressed.",
-        "Blue",
+        command="/echo **Blue** bubble pressed.",
+        label="Blue",
         text_color="#FFFFFF",
         background_color="#0275d8",
         align=ButtonTextAlign.LEFT,
         new_row=False,
     )
     bubbles.add_button(
-        "/echo **Green** bubble pressed.",
-        "Green",
+        command="/echo **Green** bubble pressed.",
+        label="Green",
         text_color="#FFFFFF",
         background_color="#5cb85c",
         align=ButtonTextAlign.CENTER,
         new_row=False,
     )
     bubbles.add_button(
-        "/echo **Red** bubble pressed.",
-        "Red",
+        command="/echo **Red** bubble pressed.",
+        label="Red",
         text_color="#FFFFFF",
         background_color="#d9534f",
         align=ButtonTextAlign.RIGHT,
@@ -202,24 +204,24 @@ async def styled_buttons(message: IncomingMessage, bot: Bot) -> None:
     keyboard = KeyboardMarkup()
 
     keyboard.add_button(
-        "/echo **Blue** keyboard pressed.",
-        "Blue",
+        command="/echo **Blue** keyboard pressed.",
+        label="Blue",
         text_color="#FFFFFF",
         background_color="#0275d8",
         align=ButtonTextAlign.LEFT,
         new_row=False,
     )
     keyboard.add_button(
-        "/echo **Green** keyboard pressed.",
-        "Green",
+        command="/echo **Green** keyboard pressed.",
+        label="Green",
         text_color="#FFFFFF",
         background_color="#5cb85c",
         align=ButtonTextAlign.CENTER,
         new_row=False,
     )
     keyboard.add_button(
-        "/echo **Red** keyboard pressed.",
-        "Red",
+        command="/echo **Red** keyboard pressed.",
+        label="Red",
         text_color="#FFFFFF",
         background_color="#d9534f",
         align=ButtonTextAlign.RIGHT,
