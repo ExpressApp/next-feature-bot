@@ -1,7 +1,7 @@
 FROM registry.ccsteam.ru/bots-cicd-images/python:3.11.5-slim
 
 # Immediately write to stdout, don't use buffer
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1
 
 EXPOSE 8000
 
@@ -29,7 +29,7 @@ RUN pip install --user --no-cache-dir poetry==1.3.2 && \
 COPY poetry.lock pyproject.toml ./
 COPY pybotx-submodule pybotx-submodule
 
-RUN poetry install --no-dev
+RUN poetry install --only main --no-root
 
 COPY app app
 COPY files files
