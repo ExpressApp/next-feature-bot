@@ -1,6 +1,7 @@
 from uuid import UUID
 
 from pybotx import Bot, BotAccountWithSecret, IncomingMessage
+from pydantic import AnyHttpUrl
 
 from app.bot.handler_with_help import HandlerCollectorWithHelp
 from app.bot.regular_expressions import ADD_BOT_CREDENIALS_REGEXP
@@ -39,9 +40,14 @@ async def add_credentials_handler(message: IncomingMessage, bot: Bot) -> None:
         await bot.answer_message("**Error:** Invalid bot id")
         return
 
+    if "://" not in host:
+        host = f"https://{host}"
+
     # Normally bot accounts doesn't added on the fly
     bot._bot_accounts_storage._bot_accounts.append(  # noqa: WPS437
-        BotAccountWithSecret(id=bot_id, host=host, secret_key=secret_key)
+        BotAccountWithSecret(
+            id=bot_id, cts_url=AnyHttpUrl(host, scheme="https"), secret_key=secret_key
+        )
     )
 
     await bot.answer_message("Credentials was added")

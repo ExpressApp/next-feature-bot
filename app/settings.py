@@ -4,7 +4,7 @@ from typing import Any, List
 from uuid import UUID
 
 from pybotx import BotAccountWithSecret
-from pydantic import BaseSettings, validator
+from pydantic import AnyHttpUrl, BaseSettings, validator
 
 
 class AppSettings(BaseSettings):
@@ -40,12 +40,21 @@ class AppSettings(BaseSettings):
         cls, credentials_str: str
     ) -> BotAccountWithSecret:
         credentials_str = credentials_str.replace("|", "@")
-        assert credentials_str.count("@") == 2, "Have you forgot to add `bot_id`?"
+        if credentials_str.count("@") != 2:
+            raise ValueError("Have you forgot to add `bot_id`?")
 
-        host, secret_key, bot_id = [
+        cts_url, secret_key, bot_id = [
             str_value.strip() for str_value in credentials_str.split("@")
         ]
-        return BotAccountWithSecret(host=host, secret_key=secret_key, id=UUID(bot_id))
+
+        if "://" not in cts_url:
+            cts_url = f"https://{cts_url}"
+
+        return BotAccountWithSecret(
+            id=UUID(bot_id),
+            cts_url=AnyHttpUrl(cts_url, scheme="https"),
+            secret_key=secret_key,
+        )
 
 
 settings = AppSettings()
